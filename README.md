@@ -35,6 +35,12 @@ permissions:
   tools: [Read]                     # native agent tools
 ```
 
+## Examples
+
+`examples/` has a benign skill and one malicious skill per threat category, with
+what each one trips. The categories follow the taxonomy in Li et al.,
+"Towards Secure Agent Skills" (arXiv:2604.02837, 2026).
+
 ## License
 
 MIT
