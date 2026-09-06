@@ -1,11 +1,14 @@
 # skillcage
 
-`skillcage` runs an untrusted AI agent skill in an isolated sandbox, in one
-command, and shows exactly what it does.
+AI agent skills are code you install from strangers. A loaded skill runs with
+your agent's permissions: it can read your files and credentials and reach any
+MCP server you have connected. You cannot tell from the source what it will do
+at runtime, and static scanners only guess.
 
-Static scanners read the code and guess. `skillcage` runs the skill headless in a
-sealed container, records every tool it calls and connection it makes, and
-compares that against what the skill declared.
+`skillcage` runs a skill in an isolated sandbox first, in one command, and shows
+exactly what it does: every tool it calls, every connection it tries, every
+secret it reaches for. It compares that against what the skill declared, so you
+can decide whether to trust it before it touches your machine.
 
 ## Getting started
 
