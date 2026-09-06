@@ -52,9 +52,9 @@ def cmd_run(args):
         print(f"image {args.image} missing; run `skillcage build` first "
               f"(or pass --image a prebuilt tag)", file=sys.stderr)
         return 3
-    key = os.environ.get("ANTHROPIC_API_KEY", "")
+    key = os.environ.get("SKILLCAGE_MODEL_KEY") or os.environ.get("ANTHROPIC_API_KEY", "")
     if not key:
-        print("warning: ANTHROPIC_API_KEY not set; the driver agent will fail",
+        print("warning: SKILLCAGE_MODEL_KEY not set; the driver agent will fail",
               file=sys.stderr)
     work = Path(tempfile.mkdtemp(prefix="skillcage-"))
     try:
