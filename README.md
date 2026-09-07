@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="assets/logo.png" alt="skillcage" width="260">
+  <img src="assets/logo.png" alt="skillcage" width="475">
 </p>
 
 Before you trust a skill, use `skillcage` to run it in a sandbox and see exactly
