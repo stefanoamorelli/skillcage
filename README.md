@@ -1,7 +1,7 @@
 # skillcage
 
-`skillcage` runs a skill in a sandbox so you can see exactly which MCP tools and
-network calls it makes, before you trust it.
+Before you trust a skill, use `skillcage` to run it in a sandbox and see exactly
+which MCP tools and network calls it makes.
 
 ## Getting started
 
