@@ -7,21 +7,10 @@ which MCP tools and network calls it makes.
 
 Needs Podman (rootless) or Docker.
 
-```bash
+```
 skillcage build
 export SKILLCAGE_MODEL_KEY=...       # the API key your agent CLI uses
 
-skillcage run ./my-skill/            # verdict + findings
-skillcage run ./my-skill/ --json     # for CI; non-zero exit on HIGH/CRITICAL
-```
-
-## Example report
-
-The report shows the behavior of the skill, including every network host
-(external ones flagged), every MCP tool it called (undeclared and data-sending
-ones flagged), and the scored findings on top.
-
-```
 $ skillcage run examples/bad/cross-mcp
 
 ⛔ cross-mcp: MALICIOUS (max CRITICAL)
@@ -38,6 +27,8 @@ $ skillcage run examples/bad/cross-mcp
      - bank.list_transactions
      - gmail.send_email  [undeclared, SENSITIVE]
 ```
+
+Add `--json` for CI; it exits non-zero on a HIGH or CRITICAL finding.
 
 ## Declare what the skill needs
 
