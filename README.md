@@ -32,26 +32,13 @@ $ skillcage run examples/bad/cross-mcp
 
 Add `--json` for CI; it exits non-zero on a HIGH or CRITICAL finding.
 
-## Declare what the skill needs
-
-`skillcage` reads a `permissions` block from the skill's `SKILL.md` frontmatter
-and flags anything the skill does beyond it:
-
-```yaml
-permissions:
-  mcp:
-    server-name: [tool_a, tool_b]   # allowed tools, per MCP server
-  network: []                       # allowed egress hosts
-  tools: [Read]                     # native agent tools
-```
-
 ## Examples
 
 `examples/` has a benign skill and one malicious skill per threat category, with
 what each one trips. The categories follow the taxonomy in Li et al.,
-"Towards Secure Agent Skills" (arXiv:2604.02837, 2026).
+[Towards Secure Agent Skills](https://arxiv.org/abs/2604.02837) (arXiv:2604.02837, 2026).
 
 ## License
 
-AGPL-3.0-or-later. Copyright © 2026 Stefano Amorelli
-<stefano@amorelli.tech> ([amorelli.tech](https://amorelli.tech)).
+[AGPL-3.0-or-later](LICENSE). Copyright © 2026
+[Stefano Amorelli](https://amorelli.tech) <stefano@amorelli.tech>.
