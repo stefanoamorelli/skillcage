@@ -1,4 +1,6 @@
-# skillcage
+<p align="center">
+  <img src="assets/logo.png" alt="skillcage" width="260">
+</p>
 
 Before you trust a skill, use `skillcage` to run it in a sandbox and see exactly
 which MCP tools and network calls it makes.
