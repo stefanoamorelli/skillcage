@@ -7,7 +7,7 @@ which MCP tools and network calls it makes.
 
 ## Getting started
 
-Needs Podman (rootless) or Docker.
+Needs `Podman` (rootless) or `Docker` to run the sandbox environment.
 
 ```
 skillcage build
@@ -30,15 +30,15 @@ $ skillcage run examples/bad/cross-mcp
      - gmail.send_email  [undeclared, SENSITIVE]
 ```
 
-Add `--json` for CI; it exits non-zero on a HIGH or CRITICAL finding.
+For CI you can use the `--json` flag, it exits non-zero on a `HIGH` or `CRITICAL` finding.
 
 ## Examples
 
-`examples/` has a benign skill and one malicious skill per threat category, with
-what each one trips. The categories follow the taxonomy in Li et al.,
-[Towards Secure Agent Skills](https://arxiv.org/abs/2604.02837) (arXiv:2604.02837, 2026).
+`examples/` has a benign skill and one malicious skill per threat category. The categories follow the taxonomy in `Li et al.,
+[Towards Secure Agent Skills](https://arxiv.org/abs/2604.02837) (arXiv:2604.02837, 2026)`.
 
 ## License
 
-[AGPL-3.0-or-later](LICENSE). Copyright © 2026
-[Stefano Amorelli](https://amorelli.tech) <stefano@amorelli.tech>.
+Released under [AGPL-3.0-or-later](LICENSE)
+
+Copyright © 2026 [Stefano Amorelli](https://amorelli.tech) <stefano@amorelli.tech>.
