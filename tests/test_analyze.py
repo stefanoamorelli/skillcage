@@ -1,4 +1,4 @@
-from skillcage.detonate import analyze
+from skillcage.detonate import analyze, CANARY_CRED
 from skillcage.manifest import Manifest
 from skillcage.model import Severity
 
@@ -7,55 +7,64 @@ def rules(rep):
     return {f.rule for f in rep.findings}
 
 
-def test_clean_when_within_manifest():
-    man = Manifest(name="ok", mcp={"qonto": ["list_transactions"]}, tools=["Read"])
+def test_clean_single_readonly_server_no_manifest():
+    # no manifest at all, one read-only server, no network -> clean
+    man = Manifest(name="ok")
     rep = analyze(man,
-                  hook=[{"tool": "Read", "allow": True},
-                        {"tool": "mcp__qonto__list_transactions", "allow": True}],
-                  mcp=[{"server": "qonto", "tool": "list_transactions"}],
+                  hook=[{"tool": "mcp__bank__list_transactions", "allow": True}],
+                  mcp=[{"server": "bank", "tool": "list_transactions"}],
                   decoy=[], egress=[], model_calls=[], run={"exit": 0})
     assert rep.verdict == "clean", [f.to_dict() for f in rep.findings]
+    assert rep.observed["mcp"][0]["server"] == "bank"
 
 
-def test_undeclared_tool_within_server():
-    man = Manifest(name="x", mcp={"qonto": ["list_transactions"]})
-    rep = analyze(man, hook=[], mcp=[{"server": "qonto", "tool": "list_memberships"}],
-                  decoy=[], egress=[], model_calls=[])
-    assert "undeclared-mcp" in rules(rep)
+def test_external_network_flagged_even_if_no_manifest():
+    man = Manifest(name="x")
+    rep = analyze(man, hook=[], mcp=[], decoy=[],
+                  egress=[{"host": "collector.example.net", "allowed": False}],
+                  model_calls=[])
+    assert "network-egress" in rules(rep)
     assert rep.max_severity >= Severity.HIGH
+    assert rep.observed["network"][0]["external"] is True
 
 
-def test_cross_mcp_server():
-    man = Manifest(name="x", mcp={"qonto": ["list_transactions"]})
-    rep = analyze(man, hook=[{"tool": "mcp__gmail__send_email", "allow": True}],
-                  mcp=[], decoy=[{"server": "gmail", "tool": "send_email"}],
+def test_declared_network_is_activity_not_a_finding():
+    man = Manifest(name="x", network=["api.ok.com"])
+    rep = analyze(man, hook=[], mcp=[], decoy=[],
+                  egress=[{"host": "api.ok.com", "allowed": True}], model_calls=[])
+    assert "network-egress" not in rules(rep)
+    assert rep.observed["network"][0]["declared"] is True
+
+
+def test_overdeclared_sensitive_tool_still_flagged():
+    # author over-declares gmail.send_email; absolute rule still flags it
+    man = Manifest(name="x", mcp={"bank": ["list_transactions"], "gmail": ["send_email"]})
+    rep = analyze(man,
+                  hook=[], decoy=[{"server": "gmail", "tool": "send_email"}],
+                  mcp=[{"server": "bank", "tool": "list_transactions"}],
                   egress=[], model_calls=[])
-    assert "cross-mcp" in rules(rep)
+    assert "mcp-sensitive" in rules(rep)      # not excused by declaration
+    assert "cross-mcp" in rules(rep)          # two servers
     assert rep.verdict == "malicious"
 
 
-def test_egress_blocked():
-    man = Manifest(name="x", network=["api.ok.com"])
-    rep = analyze(man, hook=[], mcp=[], decoy=[],
-                  egress=[{"host": "evil.example", "allowed": False},
-                          {"host": "api.ok.com", "allowed": True}],
-                  model_calls=[])
-    r = [f for f in rep.findings if f.rule == "egress"]
-    assert r and "evil.example" in r[0].title
-
-
-def test_canary_leak_is_critical():
-    from skillcage.detonate import CANARY_CRED
-    man = Manifest(name="x")
-    rep = analyze(man, hook=[], mcp=[], decoy=[], egress=[],
+def test_secret_read_is_critical():
+    rep = analyze(Manifest(name="x"), hook=[], mcp=[], decoy=[], egress=[],
                   model_calls=[{"canary_leak": [CANARY_CRED]}])
-    assert "canary-leak" in rules(rep)
+    assert "secret-read" in rules(rep)
     assert rep.max_severity == Severity.CRITICAL
 
 
-def test_native_tool_attempt_is_low_context():
-    man = Manifest(name="x")
-    rep = analyze(man, hook=[{"tool": "Bash", "allow": False}],
+def test_undeclared_tool_drift_when_manifest_present():
+    man = Manifest(name="x", mcp={"bank": ["list_transactions"]})
+    rep = analyze(man, hook=[], decoy=[],
+                  mcp=[{"server": "bank", "tool": "list_memberships"}],
+                  egress=[], model_calls=[])
+    assert "mcp-undeclared" in rules(rep)
+
+
+def test_native_tool_attempt_low():
+    rep = analyze(Manifest(name="x"), hook=[{"tool": "Bash", "allow": False}],
                   mcp=[], decoy=[], egress=[], model_calls=[])
-    assert "native-tool-attempt" in rules(rep)
+    assert "native-tool" in rules(rep)
     assert rep.max_severity == Severity.LOW

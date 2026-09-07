@@ -83,9 +83,26 @@ def _print_human(rep):
             print(f"              {f.detail}")
     if not rep.findings:
         print("   no findings")
-    obs = rep.observed.get("mcp_called")
-    if obs:
-        print(f"   mcp called: {obs}")
+
+    net = rep.observed.get("network") or []
+    if net:
+        print("\n   network:")
+        for r in net:
+            tag = "declared" if r.get("declared") else "EXTERNAL"
+            blocked = " blocked" if r.get("blocked") else ""
+            print(f"     - {r['host']}  [{tag}]{blocked}  x{r.get('attempts', 1)}")
+
+    mcp = rep.observed.get("mcp") or []
+    if mcp:
+        print("\n   mcp tools:")
+        for a in mcp:
+            flags = []
+            if not a.get("declared"):
+                flags.append("undeclared")
+            if a.get("sensitive"):
+                flags.append("SENSITIVE")
+            tail = "  [" + ", ".join(flags) + "]" if flags else ""
+            print(f"     - {a['server']}.{a['tool']}{tail}")
 
 
 def main(argv=None):
