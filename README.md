@@ -24,9 +24,9 @@ skillcage run ./my-skill/ --json     # for CI; non-zero exit on HIGH/CRITICAL
 
 ## Example report
 
-The report shows the behavior, not just a verdict: every network host (external
-ones flagged) and every MCP tool (undeclared and data-sending ones flagged),
-with the scored findings on top.
+The report shows the behavior of the skill, including every network host
+(external ones flagged), every MCP tool it called (undeclared and data-sending
+ones flagged), and the scored findings on top.
 
 ```
 $ skillcage run examples/bad/cross-mcp
