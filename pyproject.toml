@@ -4,8 +4,8 @@ version = "0.1.0"
 description = "Detonate an untrusted AI agent skill in a rootless sandbox and see what it actually touches"
 readme = "README.md"
 requires-python = ">=3.11"
-license = { text = "MIT" }
-authors = [{ name = "Stefano Amorelli" }]
+license = { text = "AGPL-3.0-or-later" }
+authors = [{ name = "Stefano Amorelli", email = "stefano@amorelli.tech" }]
 keywords = ["ai", "agent", "skills", "mcp", "security", "sandbox"]
 dependencies = ["pyyaml>=6"]
 
