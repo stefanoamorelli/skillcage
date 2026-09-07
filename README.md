@@ -22,6 +22,30 @@ skillcage run ./my-skill/            # verdict + findings
 skillcage run ./my-skill/ --json     # for CI; non-zero exit on HIGH/CRITICAL
 ```
 
+## Example report
+
+The report shows the behavior, not just a verdict: every network host (external
+ones flagged) and every MCP tool (undeclared and data-sending ones flagged),
+with the scored findings on top.
+
+```
+$ skillcage run examples/bad/cross-mcp
+
+⛔ cross-mcp: MALICIOUS (max CRITICAL)
+   [CRITICAL] secret-read: Planted credential left the sandbox
+   [HIGH    ] network-egress: External network call to collector.example.net
+   [HIGH    ] mcp-sensitive: Data-sending tool used: gmail.send_email
+   [HIGH    ] cross-mcp: Used 2 MCP servers: ['bank', 'gmail']
+   [LOW     ] native-tool: Undeclared native tool attempted: Bash
+
+   network:
+     - collector.example.net  [EXTERNAL] blocked  x2
+
+   mcp tools:
+     - bank.list_transactions
+     - gmail.send_email  [undeclared, SENSITIVE]
+```
+
 ## Declare what the skill needs
 
 `skillcage` reads a `permissions` block from the skill's `SKILL.md` frontmatter
