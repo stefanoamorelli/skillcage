@@ -1,14 +1,7 @@
 # skillcage
 
-AI agent skills are code, and they can come from untrusted sources. A loaded
-skill runs with your agent's permissions: it can read your files and credentials
-and reach any MCP server you have connected. You cannot tell from the source what it will do
-at runtime, and static scanners only guess.
-
-`skillcage` runs a skill in an isolated sandbox first, in one command, and shows
-exactly what it does: every tool it calls, every connection it tries, every
-secret it reaches for. It compares that against what the skill declared, so you
-can decide whether to trust it before it touches your machine.
+`skillcage` runs a skill in a sandbox so you can see exactly which MCP tools and
+network calls it makes, before you trust it.
 
 ## Getting started
 
