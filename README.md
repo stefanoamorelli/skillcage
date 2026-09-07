@@ -60,4 +60,5 @@ what each one trips. The categories follow the taxonomy in Li et al.,
 
 ## License
 
-MIT
+AGPL-3.0-or-later. Copyright © 2026 Stefano Amorelli
+<stefano@amorelli.tech> ([amorelli.tech](https://amorelli.tech)).
